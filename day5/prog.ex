@@ -27,22 +27,6 @@ defmodule PrintQueue do
     {valid_messages, formerly_invalid_messages}
   end
 
-  defp validate_message(message, parsed_rules) do
-    # Build adjacency list from applicable rules
-    applicable_rules = get_applicable_rules(message, parsed_rules)
-    graph = build_graph(message, applicable_rules)
-
-    # Try to find a valid ordering using topological sort
-    case topological_sort(graph) do
-      {:ok, ordered_nodes} ->
-        # Convert node indices back to numbers
-        {:ok, Enum.map(ordered_nodes, &Enum.at(message, &1))}
-
-      {:error, _} ->
-        {:error, "No valid arrangement found"}
-    end
-  end
-
   def get_sum_of_center_numbers(messages) do
     center_indices =
       messages
@@ -60,6 +44,22 @@ defmodule PrintQueue do
       |> Enum.at(Enum.at(center_indices, idx))
     end)
     |> Enum.sum()
+  end
+
+  defp validate_message(message, parsed_rules) do
+    # Build adjacency list from applicable rules
+    applicable_rules = get_applicable_rules(message, parsed_rules)
+    graph = build_graph(message, applicable_rules)
+
+    # Try to find a valid ordering using topological sort
+    case topological_sort(graph) do
+      {:ok, ordered_nodes} ->
+        # Convert node indices back to numbers
+        {:ok, Enum.map(ordered_nodes, &Enum.at(message, &1))}
+
+      {:error, _} ->
+        {:error, "No valid arrangement found"}
+    end
   end
 
   defp parse_rules(rules) do
