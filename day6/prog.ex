@@ -48,7 +48,7 @@ defmodule GuardDetection do
       next_x < 0 or next_y < 0 or next_x >= width or next_y >= height ->
         visited
 
-      # Hit obstacle or out of bounds, turn right
+      # Hit obstacle, turn right
       Map.get(grid, next_pos) == "#" ->
         new_dir = turn_right(dir)
         move(grid, pos, new_dir, width, height, visited)
